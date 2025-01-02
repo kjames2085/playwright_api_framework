@@ -1,4 +1,22 @@
 import { defineConfig, devices } from '@playwright/test';
+import {config} from "dotenv";
+
+if (process.env.ENVIRONMENT == 'stage'){
+  config({
+    path: './environment/.env.stage',
+    override: true
+  })
+} else if (process.env.ENVIRONMENT == 'cert'){
+  config({
+    path: './environment/.env.cert',
+    override: true
+  })
+} else if(process.env.ENVIRONMENT == 'prod'){
+  config({
+    path: './environment/.env.prod',
+    override: true
+  })
+}
 
 /**
  * Read environment variables from file.
@@ -26,7 +44,12 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'https://restful-booker.herokuapp.com',
+    extraHTTPHeaders:{
+     'Content-Type': 'application/json',
+      Accept: 'application/json'
+      
+    },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -36,7 +59,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome']},
     },
 
     {
